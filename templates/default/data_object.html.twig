@@ -1,0 +1,32 @@
+<html>
+<head></head>
+<body>
+<div class="main-content" >
+    {#{% if(filterDefinition.filters|length > 0) %}
+        {% for filter in filterDefinition.filters %}
+            {% set filterMarkup = filterService.filterFrontend(filter, productListing, currentFilter) %}
+            {{ filterMarkup | raw  }}
+        {% endfor %}
+    {% endif %}#}
+    <div class="row">
+
+        {% for product in productListing %}
+
+            <div class="col-md-4 d-flex align-items-strech flex-column">
+                <div class="card custom-product-card mb-4 shadow-sm flex-fill">
+                    <div class="card-body">
+                        <div class="card-body-top pb-3">
+                            <a href="/academy/{{ product.id }}"><h4 class="card-title pricing-card-title text-uppercase">{{ product.name }}</h4></a>
+                            <p class="card-text">{{ product.price }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+</body>
+</html>

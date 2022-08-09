@@ -1,0 +1,40 @@
+{% if(category) %}
+    <div class="page-header">
+        <h1>{{ category.name }}</h1>
+    </div>
+{% endif %}
+<div class="container">
+    <div class="filter-container">
+        <h2>Filters</h2>
+        <form id="js_filterfield">
+
+            {% if(filterDefinition.filters|length > 0) %}
+
+                {% for filter in filterDefinition.filters %}
+
+                    {% set filterMarkup = filterService.filterFrontend(filter, productListing, currentFilter) %}
+
+                    {{ filterMarkup | raw  }}
+
+                {% endfor %}
+            {% endif %}
+
+        </form>
+
+    </div>
+    <div class="products-list">
+        <ul>
+            {% for product in results %}
+                <li>{{ product.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{# this part for live filters
+<input type="text" id="input-field">
+{% do pimcore_inline_script().appendScript("
+    $('#input-field').on('change', function() {
+                alert('It works!');
+    });
+") %}#}

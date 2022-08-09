@@ -1,0 +1,72 @@
+services:
+    App\Ecommerce\MyConf:
+        parent: Pimcore\Bundle\EcommerceFrameworkBundle\IndexService\Config\ElasticSearch
+
+pimcore_ecommerce_framework:
+    index_service:
+        tenants:
+            Academy:
+                enabled: true
+                config_id: 'App\Ecommerce\MyConf'
+                config_options:
+                    client_config:
+                        logging: false
+                        indexName: 'pimcore-demo'
+                    es_client_params:
+                        hosts:
+                            - 'pimcore_skeleton'
+                        timeoutMs: 20000, # 20 seconds
+                        timeoutMsBackend: 120000 # 2 minutes
+                    index_settings:
+                        number_of_shards: 5
+                        number_of_replicas: 0
+                        max_ngram_diff: 30
+                        analysis:
+                            analyzer:
+                                my_ngram_analyzer:
+                                    tokenizer: my_ngram_tokenizer
+                                whitelist_analyzer:
+                                    tokenizer: standard
+                                    filter:
+                                        - white_list_filter
+                            tokenizer:
+                                my_ngram_tokenizer:
+                                    type: nGram
+                                    min_gram: 2
+                                    max_gram: 15
+                                    token_chars: [ letter, digit ]
+                            filter:
+                                white_list_filter:
+                                    type: keep
+                                    keep_words:
+                                        - was
+                                        - WAS
+                attributes:
+                    name:
+                        locale: '%%locale%%'
+                        type: keyword
+                    description:
+                        locale: '%%locale%%'
+                        type: keyword
+
+    filter_service:
+        tenants:
+            default:
+                filter_types:
+                    FilterNumberRange:
+                        # Service id for filter type implementation
+                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\ElasticSearch\NumberRange
+                        # Default template for filter, can be overwritten in filter definition
+                        template: 'eshop/filter/numrange.html.php'
+
+                    FilterNumberRangeSelection:
+                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\ElasticSearch\NumberRangeSelection
+                        template: 'eshop/filter/numrange-select.html.php'
+
+                    FilterSelect:
+                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\ElasticSearch\Select
+                        template: 'eshop/filter/select.html.php'
+
+                    FilterCategory:
+                        filter_type_id: Pimcore\Bundle\EcommerceFrameworkBundle\FilterService\FilterType\ElasticSearch\SelectCategory
+                        template: 'eshop/filter/select_category.html.twig'
