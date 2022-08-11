@@ -58,10 +58,6 @@ class DefaultController extends FrontendController
      * @return Response
      */
     public function dataObjectAction(Request $request) {
-        $a = 1;
-        ++$a;
-        echo $a;
-        exit;
         $productListing = new DemoProduct\Listing();
         $productListing->setCondition('price > ?', [intval($request->get('from-price'))]);
 

@@ -14,7 +14,7 @@
 
                     {% set filterMarkup = filterService.filterFrontend(filter, productListing, currentFilter) %}
 
-                    {{ filterMarkup | raw  }}
+                    {{ filterMarkup | raw }}
 
                 {% endfor %}
             {% endif %}
@@ -31,10 +31,10 @@
     </div>
 </div>
 
-{# this part for live filters
+ this part for live filters
 <input type="text" id="input-field">
 {% do pimcore_inline_script().appendScript("
     $('#input-field').on('change', function() {
                 alert('It works!');
     });
-") %}#}
+") %}

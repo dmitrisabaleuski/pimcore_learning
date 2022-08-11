@@ -10,27 +10,26 @@ class DemoCategory extends \Pimcore\Model\DataObject\DemoCategory
      *
      * @param DemoCategory|null $stopCategory
      * @param bool $includeStopCategory
-     *
      * @return array
      */
     public function getParentCategoryList(self $stopCategory = null, $includeStopCategory = false): array
-{
-    $parentCategories = [];
+    {
+        $parentCategories = [];
 
-    $parentCategory = $this->getParent();
-    while ($parentCategory && $parentCategory instanceof self && $parentCategory->getPublished()) {
-        if ($stopCategory && $parentCategory->getId() == $stopCategory->getId()) {
-            //cancel when root category is reached
-            $parentCategory = null;
-            if ($includeStopCategory) {
-                $parentCategories[] = $stopCategory;
+        $parentCategory = $this->getParent();
+        while ($parentCategory && $parentCategory instanceof self && $parentCategory->getPublished()) {
+            if ($stopCategory && $parentCategory->getId() == $stopCategory->getId()) {
+                //cancel when root category is reached
+                $parentCategory = null;
+                if ($includeStopCategory) {
+                    $parentCategories[] = $stopCategory;
+                }
+            } else {
+                $parentCategories[] = $parentCategory;
+                $parentCategory = $parentCategory->getParent();
             }
-        } else {
-            $parentCategories[] = $parentCategory;
-            $parentCategory = $parentCategory->getParent();
         }
-    }
 
-    return array_reverse($parentCategories);
-}
+        return array_reverse($parentCategories);
+    }
 }
